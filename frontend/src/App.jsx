@@ -4,16 +4,41 @@ import Header from "./component/Header";
 import OrdersManagement from "./component/OrdersManagement ";
 import SuppliersTable from "./component/SuppliersTable ";
 import OrderForm from "./component/OrderForm";
+import LandingPage from "./component/landingpage";
+import SignUpPage from "./component/SignUpPage";
+import UserLogin from "./component/UserLogin";
+import ProfilePage from "./component/Profile";
+import AdminDashboard from "./component/AdminDashboard";
+import AdminReportsDashboard from "./component/AdminReportsDashboard";
+
+
 
 export default function App() {
   return (
     <>
-      <Header />
       <Routes>
-        <Route path="/form" element={<AddSupplierForm />} />
-        <Route path="/order" element={< OrdersManagement/>} /> 
-        <Route path="/suppliers" element={<SuppliersTable/>} />
-        <Route path="/orderform" element={<OrderForm />} />
+        <Route path="/Login" element={<UserLogin />} />
+        <Route path="/Landing" element={<LandingPage />} />
+        <Route path="/SignUp" element={<SignUpPage />} />
+        
+        <Route
+          path="/*"
+          element={
+            <>
+              <Header />
+              <Routes>
+                <Route path="/form" element={<AddSupplierForm />} />
+                <Route path="/order" element={<OrdersManagement />} />
+                <Route path="/suppliers" element={<SuppliersTable />} />
+                <Route path="/orderform" element={<OrderForm />} />
+                <Route path="/admindashboard" element={<AdminDashboard />} />
+                <Route path="/adminreports" element={<AdminReportsDashboard />} />
+                <Route path="/ProfilePage" element={<ProfilePage />} />
+                
+              </Routes>
+            </>
+          }
+        />
       </Routes>
     </>
   );
