@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { Link } from 'react-router-dom';
 const SuppliersTable = ({ onAddSupplier }) => {
   const [suppliers, setSuppliers] = useState([
     {
@@ -40,12 +40,13 @@ const SuppliersTable = ({ onAddSupplier }) => {
           <button className="bg-green-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-700">
             Generate PDF Report
           </button>
-          <button
-            onClick={onAddSupplier}
-            className="bg-green-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-700"
-          >
-            + Add Supplier
-          </button>
+
+          <Link
+      to="/form"
+      className="bg-green-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-700 inline-block"
+    >
+      + Add Supplier
+    </Link>
         </div>
       </div>
 

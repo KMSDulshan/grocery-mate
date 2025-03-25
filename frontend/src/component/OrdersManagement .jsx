@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { Link } from 'react-router-dom';
 const OrdersManagement = () => {
   const [orders] = useState([
     {
@@ -38,9 +38,13 @@ const OrdersManagement = () => {
           <button className="bg-green-600 text-white px-4 py-2 rounded-lg shadow-md flex items-center hover:bg-green-700">
             🛒 Cart (0)
           </button>
-          <button className="bg-green-600 text-white px-4 py-2 rounded-lg shadow-md flex items-center hover:bg-green-700">
-            + New Order
-          </button>
+
+          <Link
+      to="/orderform"
+      className="bg-green-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-700 inline-block"
+    >
+      + Add Orders
+    </Link>
         </div>
       </div>
 
