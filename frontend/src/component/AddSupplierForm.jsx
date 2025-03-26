@@ -1,42 +1,42 @@
 import React, { useState } from "react";
 import { X, User, Mail, Phone, MapPin, Tag, Package, ShoppingCart, DollarSign } from "lucide-react";
 import axios from "axios";
+
 const AddSupplierForm = ({ onClose }) => {
-  const [supplier, setSupplier] = useState({})
-  
-  const [name, setName] = useState("");  // Name field state
-  const [address, setAddress] = useState("");
+  const [supplier, setSupplier] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    status: "Active",
+    products: 0,
+    orders: 0,
+    revenue: 0,
+  });
 
   const handleChange = (e) => {
     setSupplier({ ...supplier, [e.target.name]: e.target.value });
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Prepare the new supplier object with null values for empty fields
-    const newSupplier = {
-      name: supplier.name || null,
-      email:supplier.email || null,
-      address: supplier.address || null,
-      phone: supplier.phone || null,
-      status: supplier.status || "Active", // Default to "Active" if not set
-      products: supplier.products || null, // Set products to null if it's empty or zero
-      orders: supplier.orders || null, // Set orders to null if it's empty or zero
-      revenue: supplier.revenue || null, // Set revenue to null if it's empty or zero
-    };
-
     try {
-      // Send POST request to your backend to add the supplier
-      console.log(newSupplier);
-      const response = await axios.post("http://localhost:5001/Suppliers", newSupplier);
+      const response = await axios.post("http://localhost:5001/Suppliers", supplier);
       console.log(response);
 
-      // Clear form fields after submission
-      setName("");
-      setAddress("");
-      setSupplier({}); // Reset all form fields
+      
+      setSupplier({
+        name: "",
+        email: "",
+        phone: "",
+        address: "",
+        status: "Active",
+        products: 0,
+        orders: 0,
+        revenue: 0,
+      });
+
     } catch (error) {
       console.error("Error adding supplier:", error);
     }
