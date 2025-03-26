@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Edit2, Trash2, Plus, Search } from 'lucide-react';
-
+import { Link } from "react-router-dom";
 const AdminDashboard = () => {
   const [users, setUsers] = useState([
     {
@@ -135,7 +135,9 @@ const AdminDashboard = () => {
             </svg>
             User Management
           </div>
-          <div className="text-gray-500">Reports</div>
+          <Link to="/adminreports" className="text-gray-500 hover:text-green-600 transition">
+            Reports
+          </Link>
         </div>
       </div>
       
