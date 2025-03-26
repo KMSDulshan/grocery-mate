@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const GroceryMateHeader = () => {
   const [selectedCategory, setSelectedCategory] = useState('All Services');
@@ -24,7 +25,7 @@ const GroceryMateHeader = () => {
         navigate('/inventory-management');
         break;
       case 'Bakery':
-        navigate('/user-management');
+        navigate('/admindashboard');
         break;
       default:
         navigate('/');
@@ -109,19 +110,23 @@ const GroceryMateHeader = () => {
           </button>
 
           {/* Profile */}
-          <div className="flex items-center">
-            <img 
-              src="/profile-image.jpg" 
-              alt="Profile" 
-              className="rounded-full h-8 w-8 mr-2" 
-            />
-            <span className="text-sm text-green-800">Profile</span>
-          </div>
+
+
+<Link to="/ProfilePage" className="flex items-center">
+  <img 
+    src="/profile-image.jpg" 
+    alt="Profile" 
+    className="rounded-full h-8 w-8 mr-2" 
+  />
+  <span className="text-sm text-green-800">Profile</span>
+</Link>
 
           {/* Sign Up */}
-          <button className="bg-green-500 text-white px-4 py-2 rounded-md">
-            Sign Up
-          </button>
+          <Link to="/SignUp">
+  <button className="bg-green-500 text-white px-4 py-2 rounded-md">
+    Sign Up
+  </button>
+</Link>
         </div>
       </div>
 
