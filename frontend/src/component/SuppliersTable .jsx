@@ -1,37 +1,24 @@
-import React, { useState } from "react";
+;
 import { Link } from 'react-router-dom';
 import axios from "axios";
+import { useEffect, useState } from "react";
 
-const URL = "http://localhost:5001/Suppliers"
+
 
 const fetchHandler = async () => {
   return await axios.get(URL).then((res) => res.data);
-  
+
 }
 
-const SuppliersTable = ({ onAddSupplier }) => {
-  const [suppliers, setSuppliers] = useState([
-    {
-      name: "Local Farm",
-      email: "local@farm.com",
-      phone: "123-456-7890",
-      address: "123 Farm Road, City, Country",
-      status: "Active",
-      products: 15,
-      orders: 45,
-      revenue: "$12,500.00",
-    },
-    {
-      name: "Organic Farm",
-      email: "organic@farm.com",
-      phone: "098-765-4321",
-      address: "456 Organic Street, City, Country",
-      status: "Active",
-      products: 12,
-      orders: 38,
-      revenue: "$9,800.00",
-    },
-  ]);
+const SuppliersTable = () => {
+  const [suppliers, setSuppliers] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5001/suppliers")
+      .then((response) => response.json())
+      .then((data) => setSuppliers(data.Suppliers))
+      .catch((error) => console.error("Error fetching suppliers:", error));
+  }, []);
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
