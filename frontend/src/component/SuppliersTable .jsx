@@ -1,5 +1,14 @@
 import React, { useState } from "react";
 import { Link } from 'react-router-dom';
+import axios from "axios";
+
+const URL = "http://localhost:5001/Suppliers"
+
+const fetchHandler = async () => {
+  return await axios.get(URL).then((res) => res.data);
+  
+}
+
 const SuppliersTable = ({ onAddSupplier }) => {
   const [suppliers, setSuppliers] = useState([
     {

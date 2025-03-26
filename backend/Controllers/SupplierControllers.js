@@ -58,10 +58,54 @@ const getById = async (req, res,next) => {
 return res.status(200).json({supplier});
 
 }
-const updateUser = async (req, res) => {
+const updatesupplier = async (req, res) => {
+    const id = req.params.id;
+    const {  name,  email,  phone, address,  status, products, orders, revenue } = 
+    req.body;
+  
+    let supplier;
+  
+    try {
+      // Update the supplier with the provided data
+      supplier = await Supplier.findByIdAndUpdate(
+        id,
+        { name, email, phone, address, status, products, orders, revenue },
+        { new: true } // Return the updated document
+      );
+    } catch (err) {
+      console.log(err); // Log any errors
+    }
+  
+    // If no supplier is found or updated
+    if (!supplier) {
+      return res.status(404).json({ message: "Unable to update supplier" });
+    }
+  
+    // Return the updated supplier with a 200 status
+    return res.status(200).json({ supplier });
+  };
+
+ //delete supplier ditails
+  const deletesupplier = async (req, res, next) => {
+    const id = req.params.id;
+
+    let supplier;
+    try {
+    supplier =await Supplier.findByIdAndDelete(id);
+    }catch (err){
+    console.log(err);
+    }
     
-}
+    if (!supplier){
+        return res.status(404).json({ message: "Unable to Delete supplier" });
+    }
+  
+    // Return the deleted supplier with a 200 status
+    return res.status(200).json({ supplier });
+  };
 
 exports.getAllSuppliers = getAllSuppliers;
 exports.addsupplier = addsupplier;
 exports.getById = getById;
+exports.updatesupplier = updatesupplier;
+exports.deletesupplier = deletesupplier;
