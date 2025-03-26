@@ -119,7 +119,7 @@ const AddSupplierForm = ({ onClose }) => {
               <div className="grid grid-cols-2 gap-3">
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none text-green-600">
-                    <MapPin size={16} />
+                    {/* <MapPin size={16} /> */}
                   </div>
                   <input
                     type="text"
