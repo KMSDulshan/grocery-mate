@@ -1,32 +1,27 @@
 import React from 'react';
-
+import LogoImage from '../assets/grocery-mate-logo.png';
 const Login = () => {
   return (
     <div className="bg-green-50 min-h-screen">
-      <div className="min-h-screen flex flex-col md:flex-row">
-        {/* Left Side - Decorative with Logo and Tagline */}
-        <div className="hidden md:flex md:w-1/2 flex-col justify-center items-center text-white p-10" 
-             style={{ background: 'linear-gradient(135deg,rgb(0, 116, 43) 0%, rgb(0, 116, 43)' }}>
-          <div className="mb-8">
-            <i className="fas fa-shopping-cart text-5xl"></i>
-          </div>
-          <h1 className="text-4xl font-bold mb-6">Smart Grocery Shopping Assisstant</h1>
-          <p className="text-xl mb-6 text-center">Experience smart shopping with personalized recommendations</p>
-          <div className="space-y-6 mt-8">
-            <div className="flex items-center">
-              <i className="fas fa-check-circle mr-3 text-green-300"></i>
-              <p>Smart item recommendations</p>
+          <div className="min-h-screen flex flex-col md:flex-row">
+            {/* Left Side - Decorative with Logo and Tagline */}
+            <div 
+              className="hidden md:flex md:w-1/2 flex-col justify-center items-center text-white p-10" 
+              style={{ 
+                background: 'linear-gradient(135deg, rgb(0, 116, 43) 0%, rgb(0, 116, 43) 100%)'
+              }}
+            >
+              {/* Logo Section */}
+              <div className="mb-8">
+                <img 
+                  src={LogoImage} 
+                  alt="Grocery Mate Logo" 
+                  className="w-48 h-48 object-contain"
+                />
+              </div>
+              <h1 className="text-4xl font-bold mb-6 text-center">Join Smart Grocery Shopping</h1>
+              <p className="text-xl mb-6 text-center">Create an account to enjoy personalized recommendations</p>
             </div>
-            <div className="flex items-center">
-              <i className="fas fa-check-circle mr-3 text-green-300"></i>
-              <p>Complementary product suggestions</p>
-            </div>
-            <div className="flex items-center">
-              <i className="fas fa-check-circle mr-3 text-green-300"></i>
-              <p>Seamless shopping list analysis</p>
-            </div>
-          </div>
-        </div>
 
         {/* Right Side - Login Form */}
         <div className="flex w-full md:w-1/2 justify-center items-center bg-white p-5">
