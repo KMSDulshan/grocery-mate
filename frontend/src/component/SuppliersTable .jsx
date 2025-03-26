@@ -1,6 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import axios from 'axios';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
 
 const SuppliersTable = () => {
   const [suppliers, setSuppliers] = useState([]);
@@ -63,8 +66,33 @@ const SuppliersTable = () => {
     });
   };
 
-  if (loading) return <div className="p-6 text-gray-500">Loading suppliers...</div>;
-  if (error) return <div className="p-6 text-red-500">Error: {error}</div>;
+  // Generate PDF Report
+  const generatePDF = () => {
+    try {
+      const doc = new jsPDF();
+      doc.text("Suppliers Report", 14, 20);
+
+      const tableColumn = ["Name", "Email", "Phone", "Address", "Status"];
+      const tableRows = suppliers.map(supplier => [
+        supplier.name,
+        supplier.email,
+        supplier.phone,
+        supplier.address,
+        supplier.status
+      ]);
+
+      autoTable(doc, {
+        startY: 30, 
+        head: [tableColumn], 
+        body: tableRows 
+      });
+      
+      doc.save("Suppliers_Report.pdf");
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      alert('Failed to generate PDF. Check console for details.');
+    }
+  };
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
@@ -77,7 +105,7 @@ const SuppliersTable = () => {
           className="border p-2 rounded-lg w-full max-w-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
         />
         <div className="flex gap-3">
-          <button className="bg-green-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-700">
+          <button onClick={generatePDF} className="bg-green-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-700">
             Generate PDF Report
           </button>
 
