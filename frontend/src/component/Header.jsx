@@ -1,156 +1,141 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+const GroceryMateHeader = () => {
+  const [selectedCategory, setSelectedCategory] = useState('All Services');
+  const navigate = useNavigate();
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+  const handleCategoryChange = (e) => {
+    const value = e.target.value;
+    setSelectedCategory(value);
+
+    // Navigation based on selected category
+    switch(value) {
+      case 'All Services':
+        navigate('/services');
+        break;
+      case 'order':
+        navigate('/order');
+        break;
+      case 'Vegetables':
+        navigate('/suppliers');
+        break;
+      case 'Dairy':
+        navigate('/inventory-management');
+        break;
+      case 'Bakery':
+        navigate('/user-management');
+        break;
+      default:
+        navigate('/');
+    }
   };
 
-  const navLinks = [
-    { name: "Home", path: "/" },
-    { name: "Order Management", path: "/OrdersManagement" },
-    { name: "Supplier Management", path: "/SupplierManagement" }
-  ];
-
   return (
-    <header className="bg-green-600 shadow-lg sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          {/* Logo and Title */}
+    <header className="bg-green-50 shadow-sm">
+      {/* Main Header */}
+      <div className="flex items-center justify-between px-4 py-3 border-b border-green-100">
+        {/* Logo and Categories */}
+        <div className="flex items-center space-x-4">
+          {/* Logo */}
           <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-shadow duration-300">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="w-6 h-6 text-green-600"
-                >
-                  <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-              </div>
-            </div>
-            <div className="ml-3">
-              <Link to="/" className="text-xl md:text-2xl font-bold text-white hover:text-green-100 transition-colors duration-200">
-                Grocery Mate
-              </Link>
+            <div className="text-2xl font-bold" style={{color: '#2ecc71'}}>
+              GroceryMate
             </div>
           </div>
 
-          {/* Navigation Links - Desktop */}
-          <nav className="hidden md:flex space-x-4 lg:space-x-8">
-            {navLinks.map((link, index) => (
-              <Link
-                key={index}
-                to={link.path}
-                className="text-white hover:bg-green-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center"
+          {/* Category Dropdown */}
+          <div className="flex items-center">
+            <select 
+              className="text-gray-700 font-medium border-r pr-2 mr-2 bg-green-50"
+              value={selectedCategory}
+              onChange={handleCategoryChange}
+            >
+              
+              <option value="order">Order Management</option>
+              <option value="Vegetables">Supplier Management</option>
+              <option value="Dairy">Inventory Management</option>
+              <option value="Bakery">User Management</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Search Bar */}
+        <div className="flex-grow mx-4">
+          <div className="flex items-center border border-green-200 rounded-md overflow-hidden">
+            <input 
+              type="text" 
+              placeholder="Search for groceries..." 
+              className="flex-grow px-3 py-2 w-full bg-green-50"
+            />
+            <button className="bg-green-500 text-white px-4 py-2">
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                className="h-5 w-5" 
+                viewBox="0 0 20 20" 
+                fill="currentColor"
               >
-                {link.name}
-              </Link>
-            ))}
-            
-            {/* Notification Icon - Desktop */}
-            <button className="text-white p-2 rounded-full hover:bg-green-700 transition-colors duration-200 relative">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                <path 
+                  fillRule="evenodd" 
+                  d="M8 4a4 4 0 100 8 4 4 0 000-8zm-6 4a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" 
+                  clipRule="evenodd" 
+                />
               </svg>
-              <span className="absolute top-0 right-0 h-4 w-4 bg-red-500 rounded-full text-xs flex items-center justify-center">3</span>
-            </button>
-            
-            {/* User Profile - Desktop */}
-            <button className="text-white hover:bg-green-700 p-1 rounded-full transition-colors duration-200 flex items-center">
-              <div className="w-8 h-8 bg-green-800 rounded-full flex items-center justify-center border-2 border-white overflow-hidden">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                </svg>
-              </div>
-            </button>
-          </nav>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center space-x-3">
-            {/* Notification Icon - Mobile */}
-            <button className="text-white p-2 rounded-full hover:bg-green-700 transition-colors duration-200 relative">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-              </svg>
-              <span className="absolute top-0 right-0 h-4 w-4 bg-red-500 rounded-full text-xs flex items-center justify-center">3</span>
-            </button>
-            
-            <button
-              onClick={toggleMenu}
-              type="button"
-              className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-white hover:bg-green-700 focus:outline-none transition-colors duration-200"
-              aria-expanded={isMenuOpen}
-            >
-              <span className="sr-only">{isMenuOpen ? 'Close main menu' : 'Open main menu'}</span>
-              {isMenuOpen ? (
-                <svg 
-                  className="block h-6 w-6" 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              ) : (
-                <svg
-                  className="block h-6 w-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
-              )}
             </button>
           </div>
         </div>
-      </div>
 
-      {/* Mobile Menu (toggles based on state) */}
-      <div className={`md:hidden transition-all duration-300 ease-in-out ${isMenuOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-green-700 shadow-inner">
-          {navLinks.map((link, index) => (
-            <Link
-              key={index}
-              to={link.path}
-              onClick={() => setIsMenuOpen(false)}
-              className="text-white hover:bg-green-800 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+        {/* User Actions */}
+        <div className="flex items-center space-x-4">
+          {/* Notification */}
+          <button className="relative">
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              className="h-6 w-6 text-green-600" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
             >
-              {link.name}
-            </Link>
-          ))}
-          
-          {/* User Profile - Mobile */}
-          <div className="flex items-center px-3 py-2 mt-4 border-t border-green-600">
-            <div className="w-8 h-8 bg-green-800 rounded-full flex items-center justify-center border-2 border-white overflow-hidden">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <div className="ml-3 text-white">
-              <div className="text-sm font-medium">Admin User</div>
-              <Link to="/profile" className="text-xs opacity-75 hover:opacity-100">View Profile</Link>
-            </div>
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={2} 
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" 
+              />
+            </svg>
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5">
+              3
+            </span>
+          </button>
+
+          {/* Profile */}
+          <div className="flex items-center">
+            <img 
+              src="/profile-image.jpg" 
+              alt="Profile" 
+              className="rounded-full h-8 w-8 mr-2" 
+            />
+            <span className="text-sm text-green-800">Profile</span>
           </div>
+
+          {/* Sign Up */}
+          <button className="bg-green-500 text-white px-4 py-2 rounded-md">
+            Sign Up
+          </button>
         </div>
       </div>
+
+      {/* Navigation Menu */}
+      <nav className="bg-green-100 py-2">
+        <div className="container mx-auto flex justify-center space-x-6">
+          <a href="/" className="text-green-800 hover:text-green-600">Home</a>
+          <a href="/about" className="text-green-800 hover:text-green-600">About Us</a>
+          <a href="/contact" className="text-green-800 hover:text-green-600">Contact Us</a>
+          <a href="/services" className="text-green-800 hover:text-green-600">All Services</a>
+        </div>
+      </nav>
     </header>
   );
 };
 
-export default Header;
+export default GroceryMateHeader;
