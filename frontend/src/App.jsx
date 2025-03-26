@@ -10,6 +10,8 @@ import UserLogin from "./component/UserLogin";
 import ProfilePage from "./component/Profile";
 import AdminDashboard from "./component/AdminDashboard";
 import AdminReportsDashboard from "./component/AdminReportsDashboard";
+import ContactPage from "./component/ContactPage";
+import AboutPage from "./component/AboutPage";
 
 
 
@@ -34,6 +36,9 @@ export default function App() {
                 <Route path="/admindashboard" element={<AdminDashboard />} />
                 <Route path="/adminreports" element={<AdminReportsDashboard />} />
                 <Route path="/ProfilePage" element={<ProfilePage />} />
+                <Route path="/contactus" element={<ContactPage />} />
+                <Route path="/aboutus" element={<AboutPage />} />
+              
                 
               </Routes>
             </>
