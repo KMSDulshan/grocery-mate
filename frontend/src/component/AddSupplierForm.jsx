@@ -23,7 +23,7 @@ const AddSupplierForm = ({ onClose }) => {
 
     try {
       const response = await axios.post("http://localhost:5001/Suppliers", supplier);
-      console.log(response);
+      console.log("check response",response);
 
       
       setSupplier({
