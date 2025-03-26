@@ -20,21 +20,14 @@ const getAllSuppliers = async (req, res) => {
 };
 
 const addsupplier = async (req, res) => {
-
-    const {name, email, phone, address, status, products, orders, revenue } = req.body;
-     
-    let suppliers;
-    try {
-        suppliers = new Supplier({name, email, phone, address, status, products, orders, revenue});
-        await suppliers.save();
-
-    }catch (err){
-        console.log(err);
-    }
-    if(!suppliers){
-        return res.status(404).json({message:"unable not found"});
-    }
-    return res.status(200).json({suppliers});
+  try {
+    const supplier = new Supplier(req.body);
+    await supplier.save();
+    return res.status(201).json({ supplier }); // 201 Created for successful creation
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Unable to add supplier", error: err.message }); // 500 Internal Server Error
+  }
 };
 
 exports.getAllSuppliers = getAllSuppliers;

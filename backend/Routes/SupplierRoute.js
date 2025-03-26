@@ -1,8 +1,6 @@
 const express = require("express");
 const  router = express.Router();
 
-//Insert Model
-const Supplier = require("../Model/SupplierModel");
 //Insert Controller
 const SupplierController = require("../Controllers/SupplierControllers");
 
