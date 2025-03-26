@@ -1,16 +1,25 @@
 import React from 'react';
-
+import LogoImage from '../assets/grocery-mate-logo.png';
 const Signup = () => {
   return (
     <div className="bg-green-50 min-h-screen">
       <div className="min-h-screen flex flex-col md:flex-row">
         {/* Left Side - Decorative with Logo and Tagline */}
-        <div className="hidden md:flex md:w-1/2 flex-col justify-center items-center text-white p-10" 
-             style={{ background: 'linear-gradient(135deg,rgb(0, 116, 43) 0%, rgb(0, 116, 43)' }}>
+        <div 
+          className="hidden md:flex md:w-1/2 flex-col justify-center items-center text-white p-10" 
+          style={{ 
+            background: 'linear-gradient(135deg, rgb(0, 116, 43) 0%, rgb(0, 116, 43) 100%)'
+          }}
+        >
+          {/* Logo Section */}
           <div className="mb-8">
-            <i className="fas fa-shopping-cart text-5xl"></i>
+            <img 
+              src={LogoImage} 
+              alt="Grocery Mate Logo" 
+              className="w-48 h-48 object-contain"
+            />
           </div>
-          <h1 className="text-4xl font-bold mb-6">Join Smart Grocery Shopping</h1>
+          <h1 className="text-4xl font-bold mb-6 text-center">Join Smart Grocery Shopping</h1>
           <p className="text-xl mb-6 text-center">Create an account to enjoy personalized recommendations</p>
         </div>
 
