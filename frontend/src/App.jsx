@@ -12,6 +12,7 @@ import AdminDashboard from "./component/AdminDashboard";
 import AdminReportsDashboard from "./component/AdminReportsDashboard";
 import ContactPage from "./component/ContactPage";
 import AboutPage from "./component/AboutPage";
+import Updatesuplerform from "./component/Updatesuplerform";
 
 
 
@@ -38,7 +39,7 @@ export default function App() {
                 <Route path="/ProfilePage" element={<ProfilePage />} />
                 <Route path="/contactus" element={<ContactPage />} />
                 <Route path="/aboutus" element={<AboutPage />} />
-              
+                <Route path="/update-supller" element={<Updatesuplerform/>}/>
                 
               </Routes>
             </>

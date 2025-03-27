@@ -8,8 +8,12 @@ const cors = require("cors");
 app.use(express.json()); // ✅ Enables JSON parsing
 app.use(cors());
 // Use Supplier Routes
-app.use("/suppliers", supplierRoutes);
+app.use("/Suppliers", supplierRoutes);
 
+app.get('/suppliers', (req, res) => {
+  // Your logic for fetching suppliers from database
+  res.json(suppliers); // Return supplier data
+});
 // Connect to MongoDB
 mongoose
   .connect("mongodb+srv://boot:boot@cluster0.kcv7y.mongodb.net/grocery-mate?retryWrites=true&w=majority")
