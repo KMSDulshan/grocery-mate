@@ -1,57 +1,107 @@
 import React, { useState } from "react";
-import { X, User, Mail, Phone, MapPin, Tag, Package, ShoppingCart, DollarSign } from "lucide-react";
+import { X, User, Mail, Phone, MapPin } from "lucide-react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const AddSupplierForm = ({ onClose }) => {
+const AddSupplierForm = ({ onClose = () => {} }) => {
   const [supplier, setSupplier] = useState({
     name: "",
     email: "",
-    phone: "",
     address: "",
+    phone: "",
     status: "Active",
     products: 0,
     orders: 0,
     revenue: "",
   });
 
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const handleChange = (e) => {
-    setSupplier({ ...supplier, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    const parsedValue =
+      name === "products" || name === "orders"
+        ? value === "" ? 0 : parseInt(value, 10)
+        : name === "revenue"
+        ? value.replace(/[^0-9.]/g, "")
+        : value;
+
+    setSupplier({ ...supplier, [name]: parsedValue });
   };
 
-  const handleSubmit = (e) => {
+  const resetForm = () => {
+    setSupplier({
+      name: "",
+      email: "",
+      address: "",
+      phone: "",
+      status: "Active",
+      products: 0,
+      orders: 0,
+      revenue: "",
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("New Supplier:", supplier);
-    onClose();
+
+    if (!supplier.name || !supplier.email || !supplier.address || !supplier.phone || !supplier.products || !supplier.orders || !supplier.revenue) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5001/suppliers",
+        supplier,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      console.log("Response:", response.data);
+      alert("Supplier added successfully!");
+      resetForm();
+      onClose(); // Ensure onClose is called correctly
+    } catch (error) {
+      console.error("Error adding supplier:", error.response ? error.response.data : error.message);
+      
+      alert(error.response?.data?.message || "Failed to add supplier. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-5 rounded-lg shadow-xl w-full max-w-xl relative overflow-hidden">
-        {/* Decorative header */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-green-600"></div>
-        
-        {/* Close Button */}
+
         <button
           onClick={onClose}
           className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition-colors"
           aria-label="Close"
+          disabled={loading}
         >
           <X size={20} />
         </button>
 
-        {/* Form Header */}
         <div className="mb-4">
           <h2 className="text-xl font-bold text-green-700">Add New Supplier</h2>
           <p className="text-gray-500 text-sm">Enter supplier details</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Basic Information Section */}
           <div>
-            <h3 className="text-xs uppercase text-gray-500 font-semibold tracking-wider mb-2">Basic Information</h3>
-            
+            <h3 className="text-xs uppercase text-gray-500 font-semibold tracking-wider mb-2">
+              Basic Information
+            </h3>
+
             <div className="space-y-3">
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none text-green-600">
+                <div className="absolute inset-y-0 left-0 pl-2 flex items-center text-green-600">
                   <User size={16} />
                 </div>
                 <input
@@ -60,14 +110,14 @@ const AddSupplierForm = ({ onClose }) => {
                   placeholder="Supplier Name"
                   value={supplier.name}
                   onChange={handleChange}
-                  className="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
+                  className="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-green-500"
                   required
                 />
               </div>
-              
+
               <div className="grid grid-cols-2 gap-3">
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none text-green-600">
+                  <div className="absolute inset-y-0 left-0 pl-2 flex items-center text-green-600">
                     <Mail size={16} />
                   </div>
                   <input
@@ -76,13 +126,13 @@ const AddSupplierForm = ({ onClose }) => {
                     placeholder="Email Address"
                     value={supplier.email}
                     onChange={handleChange}
-                    className="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
+                    className="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-green-500"
                     required
                   />
                 </div>
-                
+
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none text-green-600">
+                  <div className="absolute inset-y-0 left-0 pl-2 flex items-center text-green-600">
                     <Phone size={16} />
                   </div>
                   <input
@@ -91,112 +141,83 @@ const AddSupplierForm = ({ onClose }) => {
                     placeholder="Phone Number"
                     value={supplier.phone}
                     onChange={handleChange}
-                    className="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
+                    className="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-green-500"
                     required
                   />
                 </div>
               </div>
-              
-              <div className="grid grid-cols-2 gap-3">
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none text-green-600">
-                    <MapPin size={16} />
-                  </div>
-                  <input
-                    type="text"
-                    name="address"
-                    placeholder="Address"
-                    value={supplier.address}
-                    onChange={handleChange}
-                    className="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
-                    required
-                  />
-                </div>
-                
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none text-green-600">
-                    <Tag size={16} />
-                  </div>
-                  <select
-                    name="status"
-                    value={supplier.status}
-                    onChange={handleChange}
-                    className="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-md appearance-none bg-white focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
-                  >
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Metrics Section */}
-          <div>
-            <h3 className="text-xs uppercase text-gray-500 font-semibold tracking-wider mb-2">Supplier Metrics</h3>
-            
-            <div className="grid grid-cols-3 gap-3">
+
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none text-green-600">
-                  <Package size={16} />
-                </div>
-                <input
-                  type="number"
-                  name="products"
-                  placeholder="Products"
-                  value={supplier.products}
-                  onChange={handleChange}
-                  className="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
-                  required
-                />
-              </div>
-              
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none text-green-600">
-                  <ShoppingCart size={16} />
-                </div>
-                <input
-                  type="number"
-                  name="orders"
-                  placeholder="Orders"
-                  value={supplier.orders}
-                  onChange={handleChange}
-                  className="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
-                  required
-                />
-              </div>
-              
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none text-green-600">
-                  <DollarSign size={16} />
+                <div className="absolute inset-y-0 left-0 pl-2 flex items-center text-green-600">
+                  <MapPin size={16} />
                 </div>
                 <input
                   type="text"
-                  name="revenue"
-                  placeholder="Revenue"
-                  value={supplier.revenue}
+                  name="address"
+                  placeholder="Address"
+                  value={supplier.address}
                   onChange={handleChange}
-                  className="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
+                  className="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-green-500"
                   required
                 />
               </div>
             </div>
           </div>
 
-          {/* Action Buttons */}
+          <div>
+            <h3 className="text-xs uppercase text-gray-500 font-semibold tracking-wider mb-2">
+              Supplier Metrics
+            </h3>
+
+            <div className="grid grid-cols-3 gap-3">
+              <input
+                type="number"
+                name="products"
+                placeholder="Products"
+                value={supplier.products}
+                onChange={handleChange}
+                className="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-green-500"
+              />
+
+              <input
+                type="number"
+                name="orders"
+                placeholder="Orders"
+                value={supplier.orders}
+                onChange={handleChange}
+                className="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-green-500"
+              />
+
+              <input
+                type="text"
+                name="revenue"
+                placeholder="Revenue"
+                value={supplier.revenue}
+                onChange={handleChange}
+                className="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-green-500"
+              />
+            </div>
+          </div>
+
           <div className="pt-3 flex justify-end gap-3 border-t border-gray-100">
+          
             <button
               type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-sm bg-white text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-1 focus:ring-gray-500"
+              onClick={() => {
+                onClose();
+                navigate("/suppliers");
+              }}
+              className="px-4 py-2 text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+              disabled={loading}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 text-sm bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-1 focus:ring-green-500 focus:ring-offset-1"
+              className="px-4 py-2 text-sm bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50"
+              disabled={loading}
             >
-              Add Supplier
+              {loading ? "Adding..." : "Add Supplier"}
             </button>
           </div>
         </form>
