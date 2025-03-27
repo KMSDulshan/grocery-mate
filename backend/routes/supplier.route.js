@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const SupplierController = require("../Controllers/SupplierControllers");
+const SupplierController = require("../controllers/supplier.controller");
 
 // Define supplier routes
 router.get("/", SupplierController.getAllSuppliers);
-router.post("/", SupplierController.addsupplier);
+router.post("/", SupplierController.createSupplier);
 router.get("/:id", SupplierController.getById);
 router.put("/:id", SupplierController.updatesupplier);
 router.delete("/:id", SupplierController.deletesupplier);
