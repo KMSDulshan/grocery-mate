@@ -1,19 +1,26 @@
-import React, { useState } from 'react';
-import { Edit2, Trash2, Plus, Search } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Edit2, Trash2, Plus, Search, X } from 'lucide-react';
+import userService from '../api/users';
 
 const AdminDashboard = () => {
   const [users, setUsers] = useState([
     {
+      _id: '1',
       username: 'admin',
       email: 'admin@grocery.com',
       name: 'Admin User',
-      role: 'Admin'
+      role: 'Admin',
+      phoneNumber: '',
+      address: ''
     },
     {
+      _id: '2',
       username: 'user',
       email: 'user@example.com',
       name: 'Regular User',
-      role: 'User'
+      role: 'User',
+      phoneNumber: '',
+      address: ''
     }
   ]);
 
@@ -23,56 +30,90 @@ const AdminDashboard = () => {
     name: '',
     phoneNumber: '',
     address: '',
-    role: 'Regular User',
+    role: 'User',
     password: '',
     confirmPassword: ''
+  });
+
+  const [editUser, setEditUser] = useState({
+    _id: '',
+    username: '',
+    email: '',
+    name: '',
+    phoneNumber: '',
+    address: '',
+    role: 'User'
   });
 
   const [errors, setErrors] = useState({});
   const [searchTerm, setSearchTerm] = useState('');
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
+  const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false);
 
-  const validateForm = () => {
+  const validateForm = (isEdit = false) => {
     const newErrors = {};
+    const userToValidate = isEdit ? editUser : newUser;
+
+    // const handleEditClick = (user) => {
+    //   // Properly initialize editUser state with all required fields
+    //   setEditUser({
+    //     _id: user._id,
+    //     username: user.username,
+    //     email: user.email,
+    //     name: user.name,
+    //     phoneNumber: user.phoneNumber || '',
+    //     address: user.address || '',
+    //     role: user.role || 'User'  // Default to 'User' if role not specified
+    //   });
+    //   setIsEditUserModalOpen(true);
+    // };
 
     // Username validation
-    if (!newUser.username) {
+    if (!userToValidate.username) {
       newErrors.username = 'Username is required';
-    } else if (users.some(user => user.username === newUser.username)) {
+    } else if (
+      !isEdit && 
+      users.some(user => user.username === userToValidate.username)
+    ) {
       newErrors.username = 'Username already exists';
-    } else if (newUser.username.length < 3) {
+    } else if (userToValidate.username.length < 3) {
       newErrors.username = 'Username must be at least 3 characters';
     }
 
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!newUser.email) {
+    if (!userToValidate.email) {
       newErrors.email = 'Email is required';
-    } else if (!emailRegex.test(newUser.email)) {
+    } else if (!emailRegex.test(userToValidate.email)) {
       newErrors.email = 'Invalid email format';
-    } else if (users.some(user => user.email === newUser.email)) {
+    } else if (
+      !isEdit && 
+      users.some(user => user.email === userToValidate.email)
+    ) {
       newErrors.email = 'Email already exists';
     }
 
     // Name validation
-    if (!newUser.name) {
+    if (!userToValidate.name) {
       newErrors.name = 'Full name is required';
-    } else if (newUser.name.length < 2) {
+    } else if (userToValidate.name.length < 2) {
       newErrors.name = 'Name must be at least 2 characters';
     }
 
-    // Password validation
-    if (!newUser.password) {
-      newErrors.password = 'Password is required';
-    } else if (newUser.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
-    }
+    // Password validation (only for new users)
+    if (!isEdit) {
+      if (!newUser.password) {
+        newErrors.password = 'Password is required';
+      } else if (newUser.password.length < 6) {
+        newErrors.password = 'Password must be at least 6 characters';
+      }
 
-    // Confirm password validation
-    if (!newUser.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password';
-    } else if (newUser.password !== newUser.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
+      // Confirm password validation
+      if (!newUser.confirmPassword) {
+        newErrors.confirmPassword = 'Please confirm your password';
+      } else if (newUser.password !== newUser.confirmPassword) {
+        newErrors.confirmPassword = 'Passwords do not match';
+      }
     }
 
     setErrors(newErrors);
@@ -82,7 +123,7 @@ const AdminDashboard = () => {
   const handleAddUser = () => {
     if (validateForm()) {
       const { confirmPassword, ...userToAdd } = newUser;
-      setUsers([...users, userToAdd]);
+      setUsers([...users, { ...userToAdd, _id: Date.now().toString() }]);
       
       // Reset form
       setNewUser({
@@ -91,7 +132,7 @@ const AdminDashboard = () => {
         name: '',
         phoneNumber: '',
         address: '',
-        role: 'Regular User',
+        role: 'User',
         password: '',
         confirmPassword: ''
       });
@@ -100,15 +141,39 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleDeleteUser = (username) => {
-    setUsers(users.filter(user => user.username !== username));
+  const handleEditUser = () => {
+    if (validateForm(true)) {
+      setUsers(users.map(user => 
+        user._id === editUser._id ? editUser : user
+      ));
+      setIsEditUserModalOpen(false);
+      setErrors({});
+    }
+  };
+
+  const handleDeleteUser = (id) => {
+    setUsers(users.filter(user => user._id !== id));
+  };
+
+  const handleEditClick = (user) => {
+    // Properly initialize editUser state with all required fields
+    setEditUser({
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      name: user.name,
+      phoneNumber: user.phoneNumber || '',
+      address: user.address || '',
+      role: user.role || 'User'  // Default to 'User' if role not specified
+    });
+    setIsEditUserModalOpen(true);
   };
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  const filteredUsers = users.filter(user => 
+  const filteredUsers = users.filter(user =>
     user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -119,10 +184,7 @@ const AdminDashboard = () => {
       <div className="bg-green-600 text-white p-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="text-xl font-bold">Admin Dashboard</div>
-          
-
         </div>
-        
       </div>
       <div className="border-b px-6 py-2">
         <div className="max-w-7xl mx-auto flex items-center">
@@ -138,14 +200,13 @@ const AdminDashboard = () => {
           <div className="text-gray-500">Reports</div>
         </div>
       </div>
-      
 
       <div className="p-6 max-w-7xl mx-auto">
         <div className="bg-white shadow-lg rounded-lg border border-green-100">
           {/* Search and Add User Section */}
           <div className="flex justify-between items-center p-4 border-b border-green-100">
             <div className="relative w-1/2">
-              <input 
+              <input
                 type="text"
                 placeholder="Search users..."
                 value={searchTerm}
@@ -154,7 +215,7 @@ const AdminDashboard = () => {
               />
               <Search className="absolute left-3 top-3 text-green-400" size={20} />
             </div>
-            <button 
+            <button
               onClick={() => setIsAddUserModalOpen(true)}
               className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 flex items-center transition duration-300"
             >
@@ -168,7 +229,7 @@ const AdminDashboard = () => {
               <div className="bg-white p-6 rounded-lg w-[600px]">
                 <h2 className="text-xl font-bold mb-4">Add New User</h2>
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
+                <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Username*</label>
                     <input 
                       type="text"
@@ -286,6 +347,128 @@ const AdminDashboard = () => {
             </div>
           )}
 
+          {/* Edit User Modal */}
+          {isEditUserModalOpen && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white p-6 rounded-lg w-[600px] relative">
+                <button 
+                  onClick={() => setIsEditUserModalOpen(false)}
+                  className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+                >
+                  <X size={24} />
+                </button>
+                
+                <h2 className="text-xl font-bold mb-4">Edit User</h2>
+                
+                <div className="grid grid-cols-2 gap-4">
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Username*</label>
+                    <input 
+                      type="text"
+                      placeholder="Enter username"
+                      value={editUser.username}
+                      onChange={(e) => setEditUser({...editUser, username: e.target.value})}
+                      className={`w-full p-2 border rounded ${errors.username ? 'border-red-500' : 'border-green-200'}`}
+                    />
+                    {errors.username && <p className="text-red-500 text-sm mt-1">{errors.username}</p>}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Email*</label>
+                    <input 
+                      type="email"
+                      placeholder="Enter email"
+                      value={editUser.email}
+                      onChange={(e) => setEditUser({...editUser, email: e.target.value})}
+                      className={`w-full p-2 border rounded ${errors.email ? 'border-red-500' : 'border-green-200'}`}
+                    />
+                    {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Password*</label>
+                    <input 
+                      type="password"
+                      placeholder="Enter password"
+                      value={editUser.password}
+                      onChange={(e) => setEditUser({...editUser, password: e.target.value})}
+                      className={`w-full p-2 border rounded ${errors.password ? 'border-red-500' : 'border-green-200'}`}
+                    />
+                    {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password*</label>
+                    <input 
+                      type="password"
+                      placeholder="Confirm password"
+                      value={editUser.confirmPassword}
+                      onChange={(e) => setEditUser({...editUser, confirmPassword: e.target.value})}
+                      className={`w-full p-2 border rounded ${errors.confirmPassword ? 'border-red-500' : 'border-green-200'}`}
+                    />
+                    {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                    <input 
+                      type="text"
+                      placeholder="Enter full name"
+                      value={editUser.name}
+                      onChange={(e) => setEditUser({...editUser, name: e.target.value})}
+                      className={`w-full p-2 border rounded ${errors.name ? 'border-red-500' : 'border-green-200'}`}
+                    />
+                    {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                    <input 
+                      type="text"
+                      placeholder="Enter phone number"
+                      value={editUser.phoneNumber}
+                      onChange={(e) => setEditUser({...editUser, phoneNumber: e.target.value})}
+                      className="w-full p-2 border border-green-200 rounded"
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                    <input 
+                      type="text"
+                      placeholder="Enter address"
+                      value={editUser.address}
+                      onChange={(e) => setEditUser({...editUser, address: e.target.value})}
+                      className="w-full p-2 border border-green-200 rounded"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">User Role</label>
+                    <select 
+                      value={editUser.role}
+                      onChange={(e) => setEditUser({...editUser, role: e.target.value})}
+                      className="w-full p-2 border border-green-200 rounded"
+                    >
+                      <option value="Regular User">Regular User</option>
+                      <option value="Admin">Admin</option>
+                    </select>
+                  </div>
+                  <div className="col-span-2 flex space-x-4 mt-4">
+                    <button 
+                      onClick={handleEditUser}
+                      className="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700"
+                    >
+                      Update User
+                    </button>
+                    <button 
+                      onClick={() => {
+                        setIsEditUserModalOpen(false);
+                        setErrors({});
+                      }}
+                      className="w-full bg-gray-200 text-gray-700 p-2 rounded hover:bg-gray-300"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* User Table */}
           <table className="w-full">
             <thead>
@@ -293,20 +476,24 @@ const AdminDashboard = () => {
                 <th className="p-3 text-left">USERNAME</th>
                 <th className="p-3 text-left">EMAIL</th>
                 <th className="p-3 text-left">NAME</th>
+                <th className="p-3 text-left">ADDRESS</th>
+                <th className="p-3 text-left">PHONE NUMBER</th>
                 <th className="p-3 text-left">ROLE</th>
                 <th className="p-3 text-left">ACTIONS</th>
               </tr>
             </thead>
             <tbody>
-              {filteredUsers.map((user, index) => (
-                <tr key={index} className="border-b border-green-100 hover:bg-green-50">
+              {filteredUsers.map((user) => (
+                <tr key={user._id} className="border-b border-green-100 hover:bg-green-50">
                   <td className="p-3">{user.username}</td>
                   <td className="p-3">{user.email}</td>
                   <td className="p-3">{user.name}</td>
+                  <td className="p-3">{user.address}</td>
+                  <td className="p-3">{user.phoneNumber}</td>
                   <td className="p-3">
-                    <span className={`px-2 py-1 rounded-full text-xs font-semibold 
-                      ${user.role === 'Admin' 
-                        ? 'bg-purple-100 text-purple-800' 
+                    <span className={`px-2 py-1 rounded-full text-xs font-semibold
+                      ${user.role === 'Admin'
+                        ? 'bg-purple-100 text-purple-800'
                         : 'bg-green-100 text-green-800'}`}
                     >
                       {user.role}
@@ -314,13 +501,14 @@ const AdminDashboard = () => {
                   </td>
                   <td className="p-3">
                     <div className="flex space-x-2">
-                      <button 
+                      <button
+                        onClick={() => handleEditClick(user)}
                         className="text-green-600 hover:text-green-800 transition"
                       >
                         <Edit2 size={20} />
                       </button>
-                      <button 
-                        onClick={() => handleDeleteUser(user.username)}
+                      <button
+                        onClick={() => handleDeleteUser(user._id)}
                         className="text-red-600 hover:text-red-800 transition"
                       >
                         <Trash2 size={20} />
