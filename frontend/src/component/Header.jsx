@@ -134,9 +134,9 @@ const GroceryMateHeader = () => {
       <nav className="bg-green-100 py-2">
         <div className="container mx-auto flex justify-center space-x-6">
           <a href="/" className="text-green-800 hover:text-green-600">Home</a>
-          <a href="/about" className="text-green-800 hover:text-green-600">About Us</a>
-          <a href="/contact" className="text-green-800 hover:text-green-600">Contact Us</a>
-          <a href="/services" className="text-green-800 hover:text-green-600">All Services</a>
+          <a href="/aboutus" className="text-green-800 hover:text-green-600">About Us</a>
+          <a href="/contactus" className="text-green-800 hover:text-green-600">Contact Us</a>
+         
         </div>
       </nav>
     </header>
