@@ -1,5 +1,6 @@
 import React from 'react';
 import LogoImage from '../assets/grocery-mate-logo.png';
+import { Link } from "react-router-dom";
 const Login = () => {
   return (
     <div className="bg-green-50 min-h-screen">
@@ -79,13 +80,13 @@ const Login = () => {
                 />
                 <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">Remember me</label>
               </div>
-              
+              <Link to = "/admindashboard">
               <button 
-                type="submit" 
                 className="w-full py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               >
                 Log In
               </button>
+              </Link>
 
               {/* Google Login Button */}
               <button 
