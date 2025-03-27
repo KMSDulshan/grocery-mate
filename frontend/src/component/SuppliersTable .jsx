@@ -72,13 +72,17 @@ const SuppliersTable = () => {
       const doc = new jsPDF();
       doc.text("Suppliers Report", 14, 20);
 
-      const tableColumn = ["Name", "Email", "Phone", "Address", "Status"];
+      const tableColumn = ["Name", "Email", "Phone", "Address", "Status","Products","Order","Revenue"];
       const tableRows = suppliers.map(supplier => [
         supplier.name,
         supplier.email,
         supplier.phone,
         supplier.address,
-        supplier.status
+        supplier.status,
+        supplier.products,
+        supplier.orders,
+        supplier.revenue
+        
       ]);
 
       autoTable(doc, {
@@ -130,6 +134,9 @@ const SuppliersTable = () => {
                 <th className="p-3 text-left">Email</th>
                 <th className="p-3 text-left">Phone</th>
                 <th className="p-3 text-left">Address</th>
+                <th className="p-3 text-left">Products</th>
+                <th className="p-3 text-left">Orders</th>
+                <th className="p-3 text-left">Revenue</th>
                 <th className="p-3 text-left">Status</th>
                 <th className="p-3 text-left">Actions</th>
               </tr>
@@ -141,6 +148,12 @@ const SuppliersTable = () => {
                   <td className="p-3">{supplier.email}</td>
                   <td className="p-3">{supplier.phone}</td>
                   <td className="p-3">{supplier.address}</td>
+                  <td className="p-3">{supplier.products}</td>
+                  <td className="p-3">{supplier.orders}</td>
+                  <td className="p-3">{supplier.revenue}</td>
+                  
+                  
+
                   <td className="p-3">
                     <span className="px-2 py-1 text-sm font-semibold rounded bg-green-200 text-green-700">
                       {supplier.status}

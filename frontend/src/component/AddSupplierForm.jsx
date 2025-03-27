@@ -45,7 +45,7 @@ const AddSupplierForm = ({ onClose = () => {} }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!supplier.name || !supplier.email || !supplier.address || !supplier.phone) {
+    if (!supplier.name || !supplier.email || !supplier.address || !supplier.phone || !supplier.products || !supplier.orders || !supplier.revenue) {
       alert("Please fill in all required fields.");
       return;
     }

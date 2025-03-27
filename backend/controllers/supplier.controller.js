@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
-const Supplier = require("../Model/SupplierModel");
+const Supplier = require("../models/Supplier");
+const supplierService = require("../services/supplier.service");
 
 // Get all suppliers
 const getAllSuppliers = async (req, res) => {
     try {
-        const suppliers = await Supplier.find();
+        const suppliers = await supplierService.getAllSuppliers();
         if (!suppliers || suppliers.length === 0) {
             return res.status(404).json({ message: "No suppliers found" });
         }
@@ -16,7 +17,7 @@ const getAllSuppliers = async (req, res) => {
 };
 
 // Add a new supplier
-const addsupplier = async (req, res) => {
+const createSupplier = async (req, res) => {
     const { name, email, phone, address, status, products, orders, revenue } = req.body;
 
     // Check for missing required fields
@@ -27,9 +28,10 @@ const addsupplier = async (req, res) => {
     }
 
     try {
-        const supplier = new Supplier({ name, email, phone, address, status, products, orders, revenue });
-        await supplier.save();
-        return res.status(201).json({ message: "Supplier added successfully", supplier });
+        const createdSupplier = await supplierService.createSupplier({
+            name, email, phone, address, status, products, orders, revenue
+        });
+        return res.status(201).json({ message: "Supplier added successfully", createdSupplier });
     } catch (err) {
         console.error("Error adding supplier:", err);
         return res.status(500).json({ message: "Unable to add supplier", error: err.message });
@@ -45,7 +47,7 @@ const getById = async (req, res) => {
     }
 
     try {
-        const supplier = await Supplier.findById(id);
+        const supplier = await supplierService.getSupplierById(id);
         if (!supplier) {
             return res.status(404).json({ message: "Supplier not found" });
         }
@@ -71,11 +73,9 @@ const updatesupplier = async (req, res) => {
     }
 
     try {
-        const supplier = await Supplier.findByIdAndUpdate(
-            id,
-            { name, email, phone, address, status, products, orders, revenue },
-            { new: true, runValidators: true }
-        );
+        const supplier = await supplierService.updateSupplier(id, {
+            name, email, phone, address, status, products, orders, revenue
+        });
 
         if (!supplier) {
             return res.status(404).json({ message: "Supplier not found or update failed" });
@@ -97,7 +97,7 @@ const deletesupplier = async (req, res) => {
     }
 
     try {
-        const supplier = await Supplier.findByIdAndDelete(id);
+        const supplier = await supplierService.deleteSupplier(id);
         if (!supplier) {
             return res.status(404).json({ message: "Supplier not found" });
         }
@@ -110,7 +110,7 @@ const deletesupplier = async (req, res) => {
 
 module.exports = {
     getAllSuppliers,
-    addsupplier,
+    createSupplier,
     getById,
     updatesupplier,
     deletesupplier
