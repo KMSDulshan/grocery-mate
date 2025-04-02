@@ -13,8 +13,8 @@ const AboutPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="relative bg-green-400 text-white">
-        <div className="max-w-7xl mx-auto px-4 py-16 md:py-24 grid md:grid-cols-2 items-center">
+      <div className="relative bg-green-500 text-white">
+        <div className="max-w-7xl mx-auto px-4 py-12 md:py-10 grid md:grid-cols-2 items-center">
           <div className="space-y-6">
             <h1 className="text-4xl md:text-5xl font-bold">
               Fresh, Sustainable, 
