@@ -35,13 +35,13 @@ function Updatesuplerform() {
     try {
       if (mode === "edit") {
         // Update supplier
-        await axios.put(`http://localhost:5001/suppliers/${supplier._id}`, supplier, {
+        await axios.put(`http://localhost:5000/suppliers/${supplier._id}`, supplier, {
           headers: { "Content-Type": "application/json" },
         });
         alert("Supplier updated successfully!");
       } else {
         // Add supplier
-        await axios.post("http://localhost:5001/suppliers", supplier, {
+        await axios.post("http://localhost:5000/suppliers", supplier, {
           headers: { "Content-Type": "application/json" },
         });
         alert("Supplier added successfully!");
