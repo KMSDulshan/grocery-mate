@@ -1,117 +1,170 @@
 import React, { useState } from 'react';
+import { 
+  User, Mail, Phone, MapPin, 
+  Camera, Edit, Save, 
+  Award, ShoppingCart, Heart, 
+  Settings 
+} from 'lucide-react';
 
-const ProfilePage = () => {
-  const [formData, setFormData] = useState({
-    fullName: 'Regular User',
-    email: 'user@example.com',
-    phoneNumber: '0987654321',
-    deliveryAddress: 'User Avenue',
-    username: 'user',
-    accountType: 'Regular User'
+const ProfileManagement = () => {
+  const [profileImage, setProfileImage] = useState('/api/placeholder/200/200');
+  const [isEditing, setIsEditing] = useState(false);
+  const [userDetails, setUserDetails] = useState({
+    name: 'Jane Doe',
+    username: 'janedoe',
+    email: 'jane.doe@example.com',
+    phoneNumber: '+94 77 123 4567',
+    address: 'No 15, Green Street, Colombo 07'
   });
+
+  const [stats, setStats] = useState({
+    totalOrders: 24,
+    totalSpent: 45750,
+    favoriteItems: 12
+  });
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setUserDetails(prev => ({
       ...prev,
       [name]: value
     }));
   };
 
-  const handleSaveChanges = () => {
-    // Implement save logic here
-    console.log('Saving profile changes:', formData);
-    alert('Changes saved successfully!');
+  const toggleEditMode = () => {
+    setIsEditing(!isEditing);
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl bg-white rounded-lg shadow-md">
-        {/* Header */}
-        <div className="bg-green-600 text-white p-4 rounded-t-lg">
-          <div className="flex items-center">
-            <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center mr-3">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-green-600">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-              </svg>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      <div className="w-full max-w-3xl mx-auto bg-white shadow-2xl rounded-2xl overflow-hidden">
+        <div className="bg-gradient-to-r from-green-600 to-green-500 p-6 relative">
+          <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
+            <div className="relative">
+              <img 
+                src={profileImage} 
+                alt="Profile" 
+                className="w-40 h-40 rounded-full object-cover border-4 border-white shadow-lg"
+              />
+              <label 
+                htmlFor="profile-upload" 
+                className="absolute bottom-2 right-2 bg-white text-green-600 rounded-full p-3 cursor-pointer hover:bg-green-100 shadow-md"
+              >
+                <Camera size={24} />
+                <input 
+                  type="file" 
+                  id="profile-upload" 
+                  accept="image/*" 
+                  className="hidden" 
+                  onChange={handleImageUpload}
+                />
+              </label>
             </div>
-            <div>
-              <h2 className="text-lg font-bold">My Profile</h2>
-              <p className="text-sm">Manage your account information</p>
+            <div className="text-white text-center md:text-left">
+              <h2 className="text-3xl font-bold">{userDetails.name}</h2>
+              <p className="text-green-200 text-lg">@{userDetails.username}</p>
+              <button 
+                onClick={toggleEditMode}
+                className="mt-2 bg-white text-green-600 px-4 py-2 rounded-full hover:bg-green-100 transition flex items-center space-x-2 mx-auto md:mx-0"
+              >
+                {isEditing ? (
+                  <>
+                    <Save size={18} /> <span>Save Profile</span>
+                  </>
+                ) : (
+                  <>
+                    <Edit size={18} /> <span>Edit Profile</span>
+                  </>
+                )}
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Profile Form */}
-        <div className="p-6">
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div>
-              <label className="block text-gray-700 text-sm font-bold mb-2">Full Name</label>
-              <input
-                type="text"
-                name="fullName"
-                value={formData.fullName}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
-            </div>
-            <div>
-              <label className="block text-gray-700 text-sm font-bold mb-2">Email *</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div>
-              <label className="block text-gray-700 text-sm font-bold mb-2">Phone Number</label>
-              <input
-                type="tel"
-                name="phoneNumber"
-                value={formData.phoneNumber}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
-            </div>
-            <div>
-              <label className="block text-gray-700 text-sm font-bold mb-2">Delivery Address</label>
-              <input
-                type="text"
-                name="deliveryAddress"
-                value={formData.deliveryAddress}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
-            </div>
-          </div>
-
-          {/* Save Changes Button */}
-          <div className="mb-4">
-            <button
-              onClick={handleSaveChanges}
-              className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-300"
-            >
-              Save Changes
-            </button>
-          </div>
-
-          {/* Account Information Section */}
-          <div className="bg-gray-50 p-4 rounded-md">
-            <h3 className="text-lg font-bold mb-3 text-gray-800">Account Information</h3>
-            <div className="space-y-2">
-              <div>
-                <span className="font-medium text-gray-600">Username:</span>
-                <span className="ml-2">{formData.username}</span>
+        <div className="grid md:grid-cols-3 gap-6 p-6">
+          <div className="md:col-span-2 space-y-6">
+            <div className="bg-green-50 p-6 rounded-xl">
+              <h3 className="text-xl font-semibold text-green-800 mb-4 flex items-center">
+                <User className="mr-2 text-green-600" /> Personal Details
+              </h3>
+              <div className="space-y-4">
+                <ProfileField 
+                  label="Full Name" 
+                  name="name"
+                  value={userDetails.name}
+                  isEditing={isEditing}
+                  onChange={handleInputChange}
+                  icon={<User className="text-green-600" />}
+                />
+                <ProfileField 
+                  label="Username" 
+                  name="username"
+                  value={userDetails.username}
+                  isEditing={isEditing}
+                  onChange={handleInputChange}
+                  icon={<Settings className="text-green-600" />}
+                />
+                <ProfileField 
+                  label="Email Address" 
+                  name="email"
+                  value={userDetails.email}
+                  isEditing={isEditing}
+                  onChange={handleInputChange}
+                  type="email"
+                  icon={<Mail className="text-green-600" />}
+                />
+                <ProfileField 
+                  label="Phone Number" 
+                  name="phoneNumber"
+                  value={userDetails.phoneNumber}
+                  isEditing={isEditing}
+                  onChange={handleInputChange}
+                  type="tel"
+                  icon={<Phone className="text-green-600" />}
+                />
+                <ProfileField 
+                  label="Address" 
+                  name="address"
+                  value={userDetails.address}
+                  isEditing={isEditing}
+                  onChange={handleInputChange}
+                  multiline
+                  icon={<MapPin className="text-green-600" />}
+                />
               </div>
-              <div>
-                <span className="font-medium text-gray-600">Account Type:</span>
-                <span className="ml-2">{formData.accountType}</span>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <div className="bg-green-100 p-6 rounded-xl text-center">
+              <h3 className="text-xl font-semibold text-green-800 mb-4">Profile Stats</h3>
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <ShoppingCart className="mx-auto text-green-600 mb-2" />
+                  <p className="font-bold text-green-900">{stats.totalOrders}</p>
+                  <p className="text-sm text-green-700">Orders</p>
+                </div>
+                <div>
+                  <Heart className="mx-auto text-green-600 mb-2" />
+                  <p className="font-bold text-green-900">{stats.favoriteItems}</p>
+                  <p className="text-sm text-green-700">Favorites</p>
+                </div>
+                <div>
+                  <Award className="mx-auto text-green-600 mb-2" />
+                  <p className="font-bold text-green-900">Rs {stats.totalSpent.toLocaleString()}</p>
+                  <p className="text-sm text-green-700">Spent</p>
+                </div>
               </div>
             </div>
           </div>
@@ -121,4 +174,36 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+const ProfileField = ({ label, name, value, isEditing, onChange, type = 'text', multiline = false, icon }) => {
+  return (
+    <div className="flex items-center space-x-4">
+      <div className="w-10">{icon}</div>
+      <div className="flex-grow">
+        <label className="text-green-800 font-medium mb-1 block">{label}</label>
+        {isEditing ? (
+          multiline ? (
+            <textarea
+              name={name}
+              value={value}
+              onChange={onChange}
+              className="w-full p-3 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 resize-y"
+              rows={3}
+            />
+          ) : (
+            <input
+              type={type}
+              name={name}
+              value={value}
+              onChange={onChange}
+              className="w-full p-3 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500"
+            />
+          )
+        ) : (
+          <p className="text-gray-700 bg-white p-3 rounded-lg border border-green-200">{value}</p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default ProfileManagement;
