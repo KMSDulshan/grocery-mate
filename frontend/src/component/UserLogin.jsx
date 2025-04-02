@@ -80,7 +80,7 @@ const Login = () => {
                 />
                 <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">Remember me</label>
               </div>
-              <Link to = "/admindashboard">
+              <Link to = "/home">
               <button 
                 className="w-full py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               >
