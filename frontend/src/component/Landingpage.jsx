@@ -6,25 +6,25 @@ import landingImage from "../assets/app-interface.png";
 
 function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-green-500 to-white">
       {/* Navigation */}
       <nav className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <ShoppingCart className="h-8 w-8 text-green-600" />
             <span className="ml-2 text-2xl font-bold text-gray-800">GroceryMate</span>
-          </div>
-          <div className="hidden md:flex space-x-6">
+          </div> */}
+          {/* <div className="hidden md:flex space-x-6">
             <a href="#features" className="text-gray-600 hover:text-green-600 transition-colors">Features</a>
             <a href="#how-it-works" className="text-gray-600 hover:text-green-600 transition-colors">How it Works</a>
             <a href="#pricing" className="text-gray-600 hover:text-green-600 transition-colors">Pricing</a>
-          </div>
-          <button 
+          </div> */}
+          {/* <button 
   className="bg-white text-green-600 px-4 py-2 rounded-lg shadow-sm border border-green-200 hover:shadow-md transition-shadow"
   onClick={() => window.location.href = '/Login'}
 >
   Login
-</button>
+</button> */}
         </div>
       </nav>
 
@@ -38,14 +38,14 @@ function LandingPage() {
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
             <button 
-  className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
+  className="bg-green-600 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
   onClick={() => window.location.href = '/Login'}
 >
   Get Started
   <ArrowRight className="ml-2 h-5 w-5" />
 </button>
 
-              <button className="bg-white text-green-600 font-bold py-3 px-8 rounded-lg shadow border border-green-200 hover:shadow-md transition-all">
+              <button className="bg-white text-green-600 font-bold py-3 px-8 rounded-lg shadow border border-green-400 hover:shadow-md transition-all">
                 Learn More
               </button>
             </div>
