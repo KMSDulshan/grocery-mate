@@ -4,8 +4,9 @@ import os
 #from flask_cors import CORS ## to run completely separate not as template
 
 app = Flask(__name__,
-            static_folder=os.path.join(os.path.pardir, 'frontend', 'static'),
-            template_folder=os.path.join(os.path.pardir, 'frontend', 'templates'))
+            static_folder='../../../frontend/static',
+            template_folder='../../../frontend/templates'
+            )
 #CROS(app)
 
 # don't need this if use CORS
