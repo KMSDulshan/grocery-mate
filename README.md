@@ -18,7 +18,7 @@ A next-generation web application that transforms grocery shopping into a smarte
 ## 🖼️ System Screenshots
 
 <div align="center">
-  <img src="https://via.placeholder.com/400x250?text=Dashboard+View" width="45%" alt="Dashboard">
+  <img src="https://via.placeholder.com/400x250?text=Dashboard+View" width="45%" alt="Dashboard">!
   <img src="https://via.placeholder.com/400x250?text=Inventory+Manager" width="45%" alt="Inventory">
   <br/>
   <img src="https://via.placeholder.com/400x250?text=AI+Assistant" width="45%" alt="AI Assistant">
@@ -42,11 +42,15 @@ A next-generation web application that transforms grocery shopping into a smarte
 
 ---
 
+## 🧠 AI Assistant Description
+GroceryMate's AI Assistant is designed to simplify and enhance your shopping journey:
+
+- **🥦 Nutrition Finder: Discover detailed nutritional data for any item.**
+- **🗣️ Voice Assistant: Navigate and add to your shopping list using voice commands.**
+- **🍲 Recipe Suggestions: Get meal ideas using what’s already in your pantry.**
+
 ## 📋 CRUD Functionalities
 
-- **AI-based Chat-bot**
-- **AI-based Recipe & Nutrition Tracking**
-- **Voice Query Input System**
 - **User Management**
 - **User Profile and Role Control**
 - **Suplier Management**
