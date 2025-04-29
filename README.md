@@ -15,14 +15,11 @@ A next-generation web application that transforms grocery shopping into a smarte
 
 ---
 
-## 🖼️ System Screenshots
+## 🖼️ System Screenshot
 
 <div align="center">
-  <img src="https://via.placeholder.com/400x250?text=Dashboard+View" width="45%" alt="Dashboard">!
-  <img src="https://via.placeholder.com/400x250?text=Inventory+Manager" width="45%" alt="Inventory">
+  <img src="https://github.com/user-attachments/assets/3baf7c82-0049-4c6f-a702-a734e35d16b8" width="45%" alt="Inventory">
   <br/>
-  <img src="https://via.placeholder.com/400x250?text=AI+Assistant" width="45%" alt="AI Assistant">
-  <img src="https://via.placeholder.com/400x250?text=Recipe+Suggestions" width="45%" alt="Recipes">
 </div>
 
 ---
