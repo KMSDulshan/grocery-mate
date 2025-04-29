@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
+import ProfileImage from '../assets/profile-image.jpg';
 
 const GroceryMateHeader = () => {
   const [selectedCategory, setSelectedCategory] = useState('All Services');
@@ -38,12 +39,15 @@ const GroceryMateHeader = () => {
       <div className="flex items-center justify-between px-4 py-3 border-b border-green-100">
         {/* Logo and Categories */}
         <div className="flex items-center space-x-4">
-          {/* Logo */}
-          <div className="flex items-center">
-            <div className="text-2xl font-bold" style={{color: '#2ecc71'}}>
-              GroceryMate
-            </div>
-          </div>
+  <div className="flex items-center">
+    <svg className="h-8 w-8 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2L3 7L12 12L21 7L12 2Z" fill="rgb(0, 116, 43)"/>
+      <path d="M3 7V17L12 22L21 17V7L12 12" fill="rgb(0, 156, 63)"/>
+    </svg>
+    <div className="text-2xl font-bold" style={{color: 'rgb(0, 116, 43)'}}>
+      GroceryMate
+    </div>
+  </div>
 
           {/* Category Dropdown */}
           <div className="flex items-center">
@@ -114,7 +118,7 @@ const GroceryMateHeader = () => {
 
 <Link to="/ProfilePage" className="flex items-center">
   <img 
-    src="/profile-image.jpg" 
+    src={ProfileImage} 
     alt="Profile" 
     className="rounded-full h-8 w-8 mr-2" 
   />
@@ -133,7 +137,7 @@ const GroceryMateHeader = () => {
       {/* Navigation Menu */}
       <nav className="bg-green-100 py-2">
         <div className="container mx-auto flex justify-center space-x-6">
-          <a href="/" className="text-green-800 hover:text-green-600">Home</a>
+          <a href="/home" className="text-green-800 hover:text-green-600">Home</a>
           <a href="/aboutus" className="text-green-800 hover:text-green-600">About Us</a>
           <a href="/contactus" className="text-green-800 hover:text-green-600">Contact Us</a>
          

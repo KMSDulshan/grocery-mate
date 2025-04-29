@@ -13,6 +13,7 @@ import AdminReportsDashboard from "./component/AdminReportsDashboard";
 import ContactPage from "./component/ContactPage";
 import AboutPage from "./component/AboutPage";
 import Updatesuplerform from "./component/Updatesuplerform";
+import Home from "./component/Home";
 
 
 
@@ -21,7 +22,7 @@ export default function App() {
     <>
       <Routes>
         <Route path="/Login" element={<UserLogin />} />
-        <Route path="/Landing" element={<LandingPage />} />
+        
         <Route path="/SignUp" element={<SignUpPage />} />
         
         <Route
@@ -40,6 +41,8 @@ export default function App() {
                 <Route path="/contactus" element={<ContactPage />} />
                 <Route path="/aboutus" element={<AboutPage />} />
                 <Route path="/update-supller" element={<Updatesuplerform/>}/>
+                <Route path="/home" element={<Home/>}/>
+                <Route path="/" element={<LandingPage />} />
                 
               </Routes>
             </>
