@@ -7,13 +7,21 @@ const AdminReportsDashboard = () => {
     {
       username: 'admin',
       email: 'admin@grocery.com',
+      name: 'Admin',
+      address: '1234 Admin Street',
+      phoneNumber: '123-456-7890',
       role: 'Admin'
     },
     {
       username: 'user',
       email: 'user@example.com',
+      name: 'User',
+      address: '1234 User Street',
+      phoneNumber: '123-456-7890',
       role: 'User'
     }
+    
+    
   ]);
 
   const generateCsvReport = () => {
@@ -118,7 +126,11 @@ const AdminReportsDashboard = () => {
                 <tr>
                   <th className="p-3 text-left">USERNAME</th>
                   <th className="p-3 text-left">EMAIL</th>
+                  <th className="p-3 text-left">NAME</th>
+                  <th className="p-3 text-left">ADDRESS</th>
+                  <th className="p-3 text-left">PHONE NUMBER</th>
                   <th className="p-3 text-left">ROLE</th>
+                  
                 </tr>
               </thead>
               <tbody>
@@ -126,6 +138,9 @@ const AdminReportsDashboard = () => {
                   <tr key={index} className="border-b border-green-100 hover:bg-green-50">
                     <td className="p-3">{user.username}</td>
                     <td className="p-3">{user.email}</td>
+                    <td className="p-3">{user.name}</td>
+                      <td className="p-3">{user.address}</td>
+                      <td className="p-3">{user.phoneNumber}</td>
                     <td className="p-3">
                       <span className={`px-2 py-1 rounded-full text-xs font-semibold 
                         ${user.role === 'Admin' 
