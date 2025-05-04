@@ -10,6 +10,3 @@ router.delete("/:id", InventoryController.deleteInventory);
 
 module.exports = router;
 
-//get - display the details
-//post - insert
-//put - Upfate
