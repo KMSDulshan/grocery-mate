@@ -15,9 +15,9 @@ const SuppliersTable = () => {
   const fetchSuppliers = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:5001/suppliers");
+      const response = await axios.get("http://localhost:5000/suppliers");
       const suppliersList = response.data.suppliers || response.data;
-      setSuppliers(Array.isArray(suppliersList) ? suppliersList : []);
+      setSuppliers(Array.isArray(suppliersList) ? suppliersList : []); // Ensure all data is set
     } catch (error) {
       console.error("Error fetching suppliers:", error);
       setError(error.response?.data?.message || "Failed to fetch suppliers");
@@ -42,7 +42,7 @@ const SuppliersTable = () => {
       try {
         console.log(`Deleting Supplier ID: ${supplierId}`);
 
-        const response = await axios.delete(`http://localhost:5001/suppliers/${supplierId}`, {
+        const response = await axios.delete(`http://localhost:5000/suppliers/${supplierId}`, {
           headers: { 'Content-Type': 'application/json' }
         });
 

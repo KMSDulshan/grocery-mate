@@ -54,7 +54,7 @@ const AddSupplierForm = ({ onClose = () => {} }) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5001/suppliers",
+        "http://localhost:5000/suppliers",
         supplier,
         {
           headers: { "Content-Type": "application/json" },
