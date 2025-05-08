@@ -33,7 +33,7 @@ const getUserById = async (req, res) => {
 // Controller to update a user
 const updateUser = async (req, res) => {
     try {
-        const user = await userService.updateUser(req.params.id, req.body);
+        const user = await userService.updateUser(req.params.id, req.body); // Pass updated data
         res.status(200).json(user);
     } catch (err) {
         res.status(400).json({ error: err.message });
@@ -50,10 +50,22 @@ const deleteUser = async (req, res) => {
     }
 };
 
+// Controller to login a user
+const loginUser = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const { user, token } = await userService.loginUser(email, password);
+        res.status(200).json({ user, token });
+    } catch (err) {
+        res.status(401).json({ error: err.message });
+    }
+};
+
 module.exports = {
     createUser,
     getAllUsers,
     getUserById,
     updateUser,
     deleteUser,
+    loginUser,
 };

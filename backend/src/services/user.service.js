@@ -11,6 +11,17 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const createUser = async (userData) => {
     const { username, email, password, name, address, phoneNumber, role } = userData;
 
+    // Validate required fields
+    if (!username) {
+        throw new Error("Username is required");
+    }
+    if (!email) {
+        throw new Error("Email is required");
+    }
+    if (!password) {
+        throw new Error("Password is required");
+    }
+
     // Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -26,8 +37,8 @@ const createUser = async (userData) => {
         email,
         password: hashedPassword,
         name,
-        address,
-        phoneNumber,
+        address, // Save address
+        phoneNumber, // Save phone number
         role,
     });
     console.log("Saving user to database:", newUser);
@@ -50,11 +61,30 @@ const getUserById = async (id) => {
 
 // Update a user
 const updateUser = async (id, updateData) => {
-    const user = await User.findByIdAndUpdate(id, updateData, { new: true });
+    const { username, email, name, phoneNumber, address } = updateData;
+
+    const user = await User.findById(id);
     if (!user) {
         throw new Error("User not found");
     }
-    return user;
+
+    if (username) {
+        user.username = username;
+    }
+    if (email) {
+        user.email = email;
+    }
+    if (name) {
+        user.name = name;
+    }
+    if (phoneNumber) {
+        user.phoneNumber = phoneNumber;
+    }
+    if (address) {
+        user.address = address;
+    }
+
+    return await user.save();
 };
 
 // Delete a user
@@ -66,10 +96,26 @@ const deleteUser = async (id) => {
     return user;
 };
 
+const loginUser = async (email, password) => {
+    const user = await User.findOne({ email });
+    if (!user) {
+        throw new Error("Invalid email or password");
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+        throw new Error("Invalid email or password");
+    }
+
+    const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: "1d" });
+    return { user, token };
+};
+
 module.exports = {
     createUser,
     getAllUsers,
     getUserById,
     updateUser,
     deleteUser,
+    loginUser,
 };
