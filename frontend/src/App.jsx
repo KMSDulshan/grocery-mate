@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import AddSupplierForm from "./component/AddSupplierForm";
 import Header from "./component/Header";
 import OrdersManagement from "./component/OrdersManagement ";
@@ -14,8 +14,12 @@ import ContactPage from "./component/ContactPage";
 import AboutPage from "./component/AboutPage";
 import Updatesuplerform from "./component/Updatesuplerform";
 import Home from "./component/Home";
+import OrderPage from "./component/OrderPage";
 
-
+const PrivateRoute = ({ children }) => {
+    const token = localStorage.getItem("token");
+    return token ? children : <Navigate to="/Login" />;
+};
 
 export default function App() {
   return (
@@ -41,7 +45,8 @@ export default function App() {
                 <Route path="/contactus" element={<ContactPage />} />
                 <Route path="/aboutus" element={<AboutPage />} />
                 <Route path="/update-supller" element={<Updatesuplerform/>}/>
-                <Route path="/home" element={<Home/>}/>
+                <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
+                <Route path="/orders" element={<OrderPage />} />
                 <Route path="/" element={<LandingPage />} />
                 
               </Routes>

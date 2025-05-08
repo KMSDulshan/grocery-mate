@@ -12,6 +12,7 @@ connectDB();
 
 // Route files
 const userRoutes = require('./routes/userRoutes');
+const orderRoutes = require('./routes/order.route');
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use(cors());
 
 // Mount routers
 app.use('/api/users', userRoutes);
+app.use('/orders', orderRoutes);
 
 const PORT = process.env.PORT || 5000;
 
