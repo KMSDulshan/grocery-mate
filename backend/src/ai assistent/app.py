@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify
-from chat import get_chat_response
+from chat import get_chat_response, get_recipe_recommendation, is_nutrition_query, get_nutrition_info, normal_chat_response
 import os
 #from flask_cors import CORS ## to run completely separate not as template
 
@@ -27,6 +27,22 @@ def predict():
     message = {"answer": response}  # dict with answer
 
     return jsonify(message)
+
+
+@app.route('/api/message', methods=['POST'])
+def chat():
+    user_input = request.json.get('message')
+
+    if is_nutrition_query(user_input):
+        response = get_nutrition_info(user_input)
+
+    else:
+        if is_nutrition_query(user_input):
+            response = get_nutrition_info(user_input)
+        else:
+            response = normal_chat_response(user_input)
+
+    return jsonify({"response": response})
 
 
 if __name__ == "__main__":
