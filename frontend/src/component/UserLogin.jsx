@@ -1,28 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LogoImage from '../assets/grocery-mate-logo.png';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "../api/auth";
+
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const { token, user } = await login(email, password); // Assuming `login` API returns user data
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user)); // Store user data
+      navigate("/home"); // Redirect to home page
+    } catch (err) {
+      setError(err.response?.data?.error || "Login failed");
+    }
+  };
+
   return (
     <div className="bg-green-50 min-h-screen">
-          <div className="min-h-screen flex flex-col md:flex-row">
-            {/* Left Side - Decorative with Logo and Tagline */}
-            <div 
-              className="hidden md:flex md:w-1/2 flex-col justify-center items-center text-white p-10" 
-              style={{ 
-                background: 'linear-gradient(135deg, rgb(0, 116, 43) 0%, rgb(0, 116, 43) 100%)'
-              }}
-            >
-              {/* Logo Section */}
-              <div className="mb-8">
-                <img 
-                  src={LogoImage} 
-                  alt="Grocery Mate Logo" 
-                  className="w-48 h-48 object-contain"
-                />
-              </div>
-              <h1 className="text-4xl font-bold mb-6 text-center">Join Smart Grocery Shopping</h1>
-              <p className="text-xl mb-6 text-center">Create an account to enjoy personalized recommendations</p>
-            </div>
+      <div className="min-h-screen flex flex-col md:flex-row">
+        {/* Left Side - Decorative with Logo and Tagline */}
+        <div 
+          className="hidden md:flex md:w-1/2 flex-col justify-center items-center text-white p-10" 
+          style={{ 
+            background: 'linear-gradient(135deg, rgb(0, 116, 43) 0%, rgb(0, 116, 43) 100%)'
+          }}
+        >
+          {/* Logo Section */}
+          <div className="mb-8">
+            <img 
+              src={LogoImage} 
+              alt="Grocery Mate Logo" 
+              className="w-48 h-48 object-contain"
+            />
+          </div>
+          <h1 className="text-4xl font-bold mb-6 text-center">Join Smart Grocery Shopping</h1>
+          <p className="text-xl mb-6 text-center">Create an account to enjoy personalized recommendations</p>
+        </div>
 
         {/* Right Side - Login Form */}
         <div className="flex w-full md:w-1/2 justify-center items-center bg-white p-5">
@@ -38,7 +57,7 @@ const Login = () => {
             <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center md:text-left">Welcome Back</h2>
             <p className="text-gray-600 mb-8 text-center md:text-left">Log in to continue smart shopping</p>
             
-            <form>
+            <form onSubmit={handleLogin}>
               <div className="mb-6">
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
                 <div className="relative">
@@ -48,6 +67,8 @@ const Login = () => {
                   <input 
                     type="email" 
                     id="email" 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="pl-10 w-full py-3 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" 
                     placeholder="your@email.com"
                   />
@@ -66,6 +87,8 @@ const Login = () => {
                   <input 
                     type="password" 
                     id="password" 
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="pl-10 w-full py-3 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" 
                     placeholder="••••••••"
                   />
@@ -80,13 +103,15 @@ const Login = () => {
                 />
                 <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">Remember me</label>
               </div>
-              <Link to = "/home">
+
+              {error && <p className="text-red-500">{error}</p>}
+
               <button 
+                type="submit"
                 className="w-full py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               >
                 Log In
               </button>
-              </Link>
 
               {/* Google Login Button */}
               <button 

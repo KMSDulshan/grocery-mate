@@ -1,6 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import { register } from "../api/auth";
 import LogoImage from '../assets/grocery-mate-logo.png';
+
 const Signup = () => {
+  const [formData, setFormData] = useState({ 
+    name: "", 
+    username: "", 
+    email: "", 
+    password: "", 
+    confirmPassword: "", 
+    phoneNumber: "", // Add phone number
+    address: "", // Add address
+  });
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+    try {
+      await register(formData);
+      navigate("/Login");
+    } catch (err) {
+      setError(err.response?.data?.error || "Registration failed");
+    }
+  };
+
   return (
     <div className="bg-green-50 min-h-screen">
       <div className="min-h-screen flex flex-col md:flex-row">
@@ -37,14 +70,31 @@ const Signup = () => {
             <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center md:text-left">Create an Account</h2>
             <p className="text-gray-600 mb-8 text-center md:text-left">Sign up to start your smart shopping journey</p>
 
-            <form>
+            <form onSubmit={handleRegister}>
               <div className="mb-6">
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
                 <input 
                   type="text" 
                   id="name" 
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
                   className="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" 
                   placeholder="John Doe" 
+                />
+              </div>
+
+              <div className="mb-6">
+                <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  className="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+                  placeholder="Enter your username"
+                  required
                 />
               </div>
 
@@ -53,6 +103,9 @@ const Signup = () => {
                 <input 
                   type="email" 
                   id="email" 
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   className="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" 
                   placeholder="your@email.com" 
                 />
@@ -63,20 +116,54 @@ const Signup = () => {
                 <input 
                   type="password" 
                   id="password" 
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
                   className="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" 
                   placeholder="••••••••" 
                 />
               </div>
 
               <div className="mb-6">
-                <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
                 <input 
                   type="password" 
-                  id="confirm-password" 
+                  id="confirmPassword" 
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
                   className="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" 
                   placeholder="••••••••" 
                 />
               </div>
+
+              <div className="mb-6">
+                <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                <input
+                  type="tel"
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  className="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+                  placeholder="Enter your phone number"
+                />
+              </div>
+
+              <div className="mb-6">
+                <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                <textarea
+                  id="address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  className="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+                  placeholder="Enter your address"
+                  rows="3"
+                />
+              </div>
+
+              {error && <p className="text-red-500 mb-4">{error}</p>}
 
               <button 
                 type="submit" 
