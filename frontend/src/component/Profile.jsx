@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { 
   User, Mail, Phone, MapPin, 
   Camera, Edit, Save, 
@@ -10,11 +11,11 @@ const ProfileManagement = () => {
   const [profileImage, setProfileImage] = useState('/api/placeholder/200/200');
   const [isEditing, setIsEditing] = useState(false);
   const [userDetails, setUserDetails] = useState({
-    name: 'Jane Doe',
-    username: 'janedoe',
-    email: 'jane.doe@example.com',
-    phoneNumber: '+94 77 123 4567',
-    address: 'No 15, Green Street, Colombo 07'
+    name: '',
+    username: '',
+    email: '',
+    phoneNumber: '', // Include phone number
+    address: '' // Include address
   });
 
   const [stats, setStats] = useState({
@@ -22,6 +23,13 @@ const ProfileManagement = () => {
     totalSpent: 45750,
     favoriteItems: 12
   });
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user")); // Retrieve user data
+    if (user) {
+      setUserDetails(user);
+    }
+  }, []);
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -42,8 +50,42 @@ const ProfileManagement = () => {
     }));
   };
 
+  const saveProfile = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.put(
+        `http://localhost:5000/api/users/${userDetails._id}`, // Ensure this URL matches your backend route
+        {
+          name: userDetails.name,
+          username: userDetails.username,
+          email: userDetails.email,
+          phoneNumber: userDetails.phoneNumber,
+          address: userDetails.address,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // Update local state and localStorage with the new user details
+      setUserDetails(response.data);
+      localStorage.setItem("user", JSON.stringify(response.data));
+      setIsEditing(false);
+      alert("Profile updated successfully!");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert(error.response?.data?.message || "Failed to update profile. Please try again.");
+    }
+  };
+
   const toggleEditMode = () => {
-    setIsEditing(!isEditing);
+    if (isEditing) {
+      saveProfile();
+    } else {
+      setIsEditing(true);
+    }
   };
 
   return (
