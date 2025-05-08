@@ -12,7 +12,7 @@ exports.createSupplier = async (newSupplier) => {
 
 exports.getAllSuppliers = async () => {
     try {
-        const suppliers = await Supplier.find();
+        const suppliers = await Supplier.find(); // Ensure no limit is applied here
         return suppliers;
     } catch (err) {
         console.error("Error fetching suppliers:", err);

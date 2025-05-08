@@ -12,7 +12,7 @@ const supplierSchema = new Schema({
     status: { type: String, enum: ["Active", "Inactive"], default: "Active" },
     products: { type: Number, default: 0 },
     orders: { type: Number, default: 0 },
-    revenue: { type: Number, default: 0 }, // Changed from string to number for calculations
+    revenue: { type: Number, default: 0 }, // Ensure no restrictions here
 }, { timestamps: true });
 
 const Supplier = model("SupplierModel", supplierSchema);

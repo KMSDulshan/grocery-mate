@@ -6,9 +6,7 @@ const supplierService = require("../services/supplier.service");
 const getAllSuppliers = async (req, res) => {
     try {
         const suppliers = await supplierService.getAllSuppliers();
-        if (!suppliers || suppliers.length === 0) {
-            return res.status(404).json({ message: "No suppliers found" });
-        }
+        // Ensure no limit is applied here
         return res.status(200).json({ suppliers });
     } catch (err) {
         console.error("Error fetching suppliers:", err);
