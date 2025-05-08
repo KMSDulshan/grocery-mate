@@ -139,12 +139,12 @@ const AdminDashboard = () => {
       setIsLoading(true);
       try {
         const response = await axios.put(`${API_URL}/${editUser._id}`, {
-          username: editUser.username,
-          email: editUser.email,
-          role: editUser.role,
-          name: editUser.name,
+          username: editUser.username, // Include username
+          email: editUser.email,      // Include email
+          name: editUser.name,        // Include name
           phoneNumber: editUser.phoneNumber,
-          address: editUser.address
+          address: editUser.address,
+          role: editUser.role,
         });
 
         setUsers(users.map(user => 
