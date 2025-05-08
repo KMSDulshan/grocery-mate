@@ -4,11 +4,12 @@ import axios from 'axios';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-
 const SuppliersTable = () => {
   const [suppliers, setSuppliers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState(""); // State for search term
+  const [filteredSuppliers, setFilteredSuppliers] = useState([]); // State for filtered suppliers
   const navigate = useNavigate();
 
   // Fetch suppliers
@@ -30,6 +31,18 @@ const SuppliersTable = () => {
   useEffect(() => {
     fetchSuppliers();
   }, []);
+
+  // Filter suppliers based on search term
+  useEffect(() => {
+    setFilteredSuppliers(
+      suppliers.filter((supplier) =>
+        supplier.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        supplier.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        supplier.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        supplier.address.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
+  }, [searchTerm, suppliers]);
 
   // Delete Supplier
   const handleDelete = async (supplierId) => {
@@ -106,6 +119,8 @@ const SuppliersTable = () => {
         <input
           type="text"
           placeholder="Search Suppliers"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)} // Update search term
           className="border p-2 rounded-lg w-full max-w-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
         />
         <div className="flex gap-3">
@@ -124,7 +139,7 @@ const SuppliersTable = () => {
       </div>
 
       <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-        {suppliers.length === 0 ? (
+        {filteredSuppliers.length === 0 ? (
           <div className="p-6 text-center text-gray-500">No suppliers found</div>
         ) : (
           <table className="w-full border-collapse">
@@ -142,7 +157,7 @@ const SuppliersTable = () => {
               </tr>
             </thead>
             <tbody>
-              {suppliers.map((supplier) => (
+              {filteredSuppliers.map((supplier) => (
                 <tr key={supplier._id} className="border-t">
                   <td className="p-3">{supplier.name}</td>
                   <td className="p-3">{supplier.email}</td>
@@ -151,9 +166,6 @@ const SuppliersTable = () => {
                   <td className="p-3">{supplier.products}</td>
                   <td className="p-3">{supplier.orders}</td>
                   <td className="p-3">{supplier.revenue}</td>
-                  
-                  
-
                   <td className="p-3">
                     <span className="px-2 py-1 text-sm font-semibold rounded bg-green-200 text-green-700">
                       {supplier.status}
