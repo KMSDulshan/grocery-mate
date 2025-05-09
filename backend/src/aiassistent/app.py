@@ -1,13 +1,13 @@
 from flask import Flask, render_template, request, jsonify
 from chat import get_chat_response, get_recipe_recommendation, is_nutrition_query, get_nutrition_info, normal_chat_response
 import os
-#from flask_cors import CORS ## to run completely separate not as template
+from flask_cors import CORS ## to run completely separate not as template
 
 app = Flask(__name__,
-            static_folder='../../../frontend/static'
+            #static_folder='../../../frontend/static'
             #template_folder='../../../frontend/templates'
             )
-#CROS(app)
+CORS(app)
 
 # don't need this if use CORS
 # render base HTML
